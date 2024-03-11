@@ -1,0 +1,58 @@
+﻿@model BlogPostViewModel
+
+<div class="row">
+    <div class="col-lg-8">
+        <h1 class="mt-4">@Model.BlogPost.Title</h1>
+        <p class="lead">
+            by Estee Green
+        </p>
+        <hr />
+        <p>Posted on @Model.BlogPost.DateSubmitted.ToLongDateString()</p>
+        <hr />
+        <p style="font-size:20px;">@Model.BlogPost.BlogText</p>
+        <hr />
+
+        @* COMMENTS FORM *@
+
+        <div class="card my-4">
+            <h5 class="card-header">Leave a Comment:</h5>
+            <div class="card-body">
+                <form method="post" action="/home/addcomment">
+                    <input type="hidden" value="@Model.BlogPost.Id" name="BlogPostId" />
+                    <div class="form-group">
+                        @if(Model.CommenterName == null)
+                        {
+                            Model.CommenterName = "";
+                        }
+                        <input value ="@Model.CommenterName" type="text" id="commenterName" placeholder="Please enter your name" class="form-control" name="commenterName"  />
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Comment..." id="text" name="text" class="form-control mt-3" rows="3"></textarea>
+                    </div>
+                    <button id="submit" disabled class="btn btn-primary mt-3">Submit</button>
+                </form>
+            </div>
+        </div>
+
+
+        @foreach (var comment in Model.BlogPost.Comments)
+        {
+            <div class="media mb-4">
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="" />
+                <div class="media-body mt-1">
+                    <h5 class="mt-0">
+                        @comment.CommenterName
+                        <small>@comment.DateCommented.ToLongDateString() @comment.DateCommented.ToShortTimeString()</small>
+                    </h5>
+                    @comment.Text
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/addcomment.js"></script>
+}
